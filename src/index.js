@@ -9,7 +9,7 @@ if (typeof process.argv[2] !== 'undefined') {
   UPDATE_INTERVAL = process.argv[2];
 }
 else {
-  UPDATE_INTERVAL = 3500;
+  UPDATE_INTERVAL = 12000;
 }
 
 console.log(process.argv)
@@ -30,17 +30,17 @@ for (let i = 1; i <= bot_count; i++) {
   let bot = bot_group[bot_num] = new Discord.Client()
   TimeOut[bot_num] = Date.now()
   bot.on('ready', () => {
-    console.log(`Logged in as ${bot.user.tag}!`);
-    bot.user.setActivity(`😀`);
+    console.log(`Logged in as ${bot.user.tag}! UPDATE INTERVAL ${UPDATE_INTERVAL}`);
+    bot.user.setActivity(`bot starting....❤❤`);
     if (guildMeCache?.[bot_num] == undefined) guildMeCache[bot_num] = []
     bot.guilds.cache.each(guild => guildMeCache[bot_num].push(guild.me));
     setInterval(() => { showPrice(bot_num) }, UPDATE_INTERVAL);
   });
 
   bot.on('rateLimit', (e) => {
-    console.log(e)
     if (typeof e.timeout !== undefined && e.path.includes('@me/nick')) {
-      TimeOut[bot_num] = Date.now() + e.timeout + 500
+      TimeOut[bot_num] = Date.now() + e.timeout + 3000
+      console.log(`${Date.now()}-${TICKER}:time out ${e.timeout}`,TimeOut[bot_num])
     }
   })
 
@@ -53,7 +53,6 @@ for (let i = 1; i <= bot_count; i++) {
       var args = content.substring(1).split(' ');
       var command = args[0]
       var param = args[1]
-  
       if (command === `${TICKER.toLowerCase()}ping`) {
         msg.channel.send('pong');
       }
@@ -79,7 +78,8 @@ function showPrice(bot_num) {
   let lastPRICE = priceData[bot_num].c
   let changeArrow = change24H > 0 ? '(↗)' : (change24H < 0 ? '(↘)' : '(→)')
   let coin = ticker_list[bot_num].toUpperCase()
-  if (Date.now() > TimeOut[bot_num]) guildMeCache[bot_num].forEach(guildMe => guildMe.setNickname(`${coin} :24h ${parseFloat(change24H).toFixed(2)}%`));
+  if (Date.now() < TimeOut[bot_num]) return;
+  guildMeCache[bot_num].forEach(guildMe => guildMe.setNickname(`${coin} :24h ${parseFloat(change24H).toFixed(2)}%`));
   bot_group[bot_num].user.setActivity(`$ ${lastPRICE} ${changeArrow}`);
   //console.log(`${coin.toUpperCase()} 24hr change ${change24H} ${changeArrow} $ ${lastPRICE}`)
 }
