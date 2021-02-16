@@ -69,6 +69,15 @@ class SocketClient {
     }
     this._handlers.get(method).push(callback);
   }
+  subScribe(symbols){
+    if (this._ws.readyState === WebSocket.OPEN) {
+      this._ws.send({
+        "method": "SUBSCRIBE",
+        "params": symbols,
+        "id": 1
+      });
+    }
+  }
 }
 
 export default SocketClient;
