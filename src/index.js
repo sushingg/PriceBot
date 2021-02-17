@@ -91,7 +91,6 @@ function setGroup(guildMe, status) {
   let role_base = guildMe.guild.roles.cache.find(e => e.name == 'CryptoCurrency')
   if (status == 'up') {
     guildMe.roles.add(role_up)
-    guildMe.roles.remove(role_down)
     guildMe.roles.remove(role_base)
   }
   if (status == 'down') {
@@ -101,8 +100,6 @@ function setGroup(guildMe, status) {
   }
   if (status == 'equal') {
     guildMe.roles.add(role_base)
-    guildMe.roles.remove(role_down)
-    guildMe.roles.remove(role_up)
   }
 }
 function showPrice(bot_num) {
