@@ -118,7 +118,7 @@ function showPrice(bot_num) {
   let coin = ticker_list[bot_num].toUpperCase()
   if (Date.now() < TimeOut[bot_num]) return;
   guildMeCache[bot_num].forEach(guildMe => guildMe.setNickname(`${coin} :24h ${parseFloat(change24H).toFixed(2)}%`));
-  bot_group[bot_num].user.setActivity(`$ ${lastPRICE} ${changeArrow}`);
+  bot_group[bot_num].user.setActivity(`$ ${lastPRICE.toFixed(4)} ${changeArrow}`);
 
   //console.log(`${coin.toUpperCase()} 24hr change ${change24H} ${changeArrow} $ ${lastPRICE}`)
 }
